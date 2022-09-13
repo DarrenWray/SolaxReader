@@ -7,7 +7,7 @@ In order to access the SolaxCloud API, you must:
 - Set strTokenId to the value provide in your implementation of SolaxRealTime.cs
 - Set strRegistrationNumber to the 10 character alphanumeric code that is available from your SolaxCloud account of can often be found on the inverter or in the inverter settings
 
-The code extract below shows how to call the library, included in the solution there is a command line application that demonstrates the code, **to make the code active you will need to provide your values for strApiBaseAddress, strRegistrationNumber and strTokenId.
+The code extract below shows how to call the library, included in the solution there is a command line application that demonstrates the code, ***to make the code active you will need to provide your values for strApiBaseAddress, strRegistrationNumber and strTokenId.***
 
 <pre><code>
 SolaxRealTime? srtData = SolaxRealTime.GetSolaxRealTimeData(strApiBaseAddress, strRegistrationNumber, strTokenId);
