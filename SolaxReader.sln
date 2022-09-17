@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaxReader", "SolaxReader\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolaxConsole", "SolaxConsole\SolaxConsole.csproj", "{2C9BBD6E-552B-459F-A16A-3D42AE7C0BB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualCrossingWeather", "VisualCrossingWeather\VisualCrossingWeather.csproj", "{6E03E845-C615-430D-AA6B-E050F1EE05C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2C9BBD6E-552B-459F-A16A-3D42AE7C0BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C9BBD6E-552B-459F-A16A-3D42AE7C0BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C9BBD6E-552B-459F-A16A-3D42AE7C0BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E03E845-C615-430D-AA6B-E050F1EE05C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E03E845-C615-430D-AA6B-E050F1EE05C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E03E845-C615-430D-AA6B-E050F1EE05C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E03E845-C615-430D-AA6B-E050F1EE05C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

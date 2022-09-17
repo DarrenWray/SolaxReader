@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SolaxReader\SolaxReader.csproj" />
+      <ProjectReference Include="..\VisualCrossingWeather\VisualCrossingWeather.csproj" />
     </ItemGroup>
 
 </Project>

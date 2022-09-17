@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
-using System.Text.Json;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace SolaxReader
 {
@@ -34,10 +35,23 @@ namespace SolaxReader
             None = 0,
             Watts,
             KiloWattHours,
-            Percentage
+            Percentage,
+            Centimeters,
+            MPH,
+            Miles,
+            Centigrade,
+            Millibar,
         }
+        #endregion
+        
+        #region Public Enums
 
-        private static HttpClient client = new HttpClient();
+        public enum HeaderOptions
+        {
+            NoHeader=0,
+            IncludeHeader,
+            AutoHeader
+        }
         #endregion
 
         #region Solax Real-time Information
@@ -76,8 +90,13 @@ namespace SolaxReader
         /// </summary>
         public SolaxRealTime()
         {
+            blIsGetActive = false;
         }
 
+        ~SolaxRealTime()
+        {
+            blIsGetActive = false;
+        }
         #endregion
 
         #region Decoder methods
@@ -97,6 +116,21 @@ namespace SolaxReader
 
                 case Units.Percentage:
                     return ("%");
+                
+                case Units.Centimeters:
+                    return ("CM");
+                
+                case Units.MPH:
+                    return ("MPH");
+                
+                case Units.Miles:
+                    return ("miles");
+                
+                case Units.Centigrade:
+                    return ("°C");
+                
+                case Units.Millibar:
+                    return ("mbar");
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitsSource), unitsSource, null);
@@ -200,6 +234,53 @@ namespace SolaxReader
             }
         }
 
+        private static string DecodeDirection(double? dDirection)
+        {
+            if (dDirection == null)
+                return ("Unknown");
+            if (IsBetween(dDirection, 348.74, 360.00)) 
+                return("N");
+            if (IsBetween(dDirection, 0.00, 11.24)) 
+                return("N");
+            if (IsBetween(dDirection, 11.25, 33.75)) 
+                return("NNE");
+            if (IsBetween(dDirection, 33.74, 56.25)) 
+                return("NE");
+            if (IsBetween(dDirection, 56.24, 78.75)) 
+                return("ENE");
+            if (IsBetween(dDirection, 78.74, 101.25)) 
+                return("E");
+            if (IsBetween(dDirection, 101.24, 123.75)) 
+                return("ESE");
+            if (IsBetween(dDirection, 123.74, 146.25)) 
+                return("SE");
+            if (IsBetween(dDirection, 146.24, 168.75)) 
+                return("SSE");
+            if (IsBetween(dDirection, 168.74, 191.25)) 
+                return("S");
+            if (IsBetween(dDirection, 191.24, 213.75)) 
+                return("SSW");
+            if (IsBetween(dDirection, 213.74, 236.25)) 
+                return("SW");
+            if (IsBetween(dDirection, 236.24, 258.75)) 
+                return("WSW");
+            if (IsBetween(dDirection, 258.74, 281.25)) 
+                return("W");
+            if (IsBetween(dDirection, 281.24, 303.75)) 
+                return("WNW");
+            if (IsBetween(dDirection, 303.74, 326.25)) 
+                return("NW");
+            if (IsBetween(dDirection, 326.24, 348.75)) 
+                return("NNW");
+            
+            return ("Unknown");
+        }
+
+        private static bool IsBetween(double? dValue, double dMin, double dMax)
+        {
+            if (dValue == null) return (false);
+            return((dValue>=dMin && dValue<=dMax));
+        }
         #endregion
 
         #region Display Methods
@@ -265,18 +346,106 @@ namespace SolaxReader
 
         #endregion
 
+        #region Save to CSV
+        private static string SafeValue(string strSource, bool blIncludeComma=true, string strDefaultValue="")
+        {
+            return((string.IsNullOrWhiteSpace(strSource) ? strDefaultValue : strSource) + (blIncludeComma ? "," : ""));
+        }
+
+        private static string SafeValue(double? dSource, bool blIncludeComma=true, string strDefaultValue = "0.0")
+        {
+            return((dSource==null ? strDefaultValue : $"{dSource:0.0}") + (blIncludeComma ? "," : ""));
+        }
+        
+        /// <summary>
+        /// Method to write the instance to a CSV file
+        /// </summary>
+        /// <param name="strTargetFile">The file to create or append to</param>
+        /// <param name="hoHeader">Header options</param>
+        /// <param name="wWeather">The weather data to include, or null if no weather is not to be included</param>
+        public void WriteToCSV(string strTargetFile, HeaderOptions hoHeader = HeaderOptions.AutoHeader, VisualCrossingWeather.Weather? wWeather=null)
+        {
+            HeaderOptions hoRealHeader = hoHeader;
+            StringBuilder strContent = new StringBuilder();
+
+            if (hoRealHeader == HeaderOptions.AutoHeader)
+            {
+                hoRealHeader = File.Exists(strTargetFile) ? HeaderOptions.NoHeader : HeaderOptions.IncludeHeader;
+            }
+
+            if (hoRealHeader == HeaderOptions.IncludeHeader)
+            {
+                strContent.Append($"Time,Serial Number,Registration Number,Inverter Type,Inverter Status,% Required Generated,Load ({DecodeUnits(Units.Watts)}),AC Power ({DecodeUnits(Units.Watts)}),Battery ({DecodeUnits(Units.Watts)}),Battery %,Current Feed-in ({DecodeUnits(Units.Watts)}),Current Feed-in M2 ({DecodeUnits(Units.Watts)}),DC Power 1 ({DecodeUnits(Units.Watts)}),DC Power 2 ({DecodeUnits(Units.Watts)}),DC Power 3 ({DecodeUnits(Units.Watts)}),DC Power 4 ({DecodeUnits(Units.Watts)}),Daily Yield ({DecodeUnits(Units.KiloWattHours)}),Total Yield ({DecodeUnits(Units.KiloWattHours)}),Total Feed-in ({DecodeUnits(Units.KiloWattHours)}),Total From Grid ({DecodeUnits(Units.KiloWattHours)}),EPS Power 1 ({DecodeUnits(Units.Watts)}),EPS Power 2 ({DecodeUnits(Units.Watts)}),EPS Power 3 ({DecodeUnits(Units.Watts)})");
+                if (wWeather != null)
+                {
+                    strContent.Append($",Cloud Cover %,Conditions,Temp ({DecodeUnits(Units.Centigrade)}),Humidity,Dew Point ({DecodeUnits(Units.Centigrade)}),Wind Speed ({DecodeUnits(Units.MPH)}),Wind Gust ({DecodeUnits(Units.MPH)}),Direction,Pressure,Visibility ({DecodeUnits(Units.Miles)}),Sunrise,Sunset");
+                }
+            }
+
+            strContent.Append("\n");
+            strContent.Append(SafeValue(uploadTime));
+            strContent.Append(SafeValue(inverterSN));
+            strContent.Append(SafeValue(sn));
+            strContent.Append(SafeValue(DecodeInverterType(inverterType)));
+            strContent.Append(SafeValue(DecodeInverterStatus(inverterStatus)));
+            strContent.Append(SafeValue((acpower > 0.0) ? (acpower / (acpower - feedinpower)*100) : 0));
+            strContent.Append(SafeValue(acpower - feedinpower));
+            strContent.Append(SafeValue(acpower));
+            strContent.Append(SafeValue(batPower));
+            strContent.Append(SafeValue(soc));
+            strContent.Append(SafeValue(feedinpower));
+            strContent.Append(SafeValue(feedinpowerM2));
+            strContent.Append(SafeValue(powerdc1));
+            strContent.Append(SafeValue(powerdc2));
+            strContent.Append(SafeValue(powerdc3));
+            strContent.Append(SafeValue(powerdc4));
+            strContent.Append(SafeValue(yieldtoday));
+            strContent.Append(SafeValue(yieldtotal));
+            strContent.Append(SafeValue(feedinenergy));
+            strContent.Append(SafeValue(consumeenergy));
+            strContent.Append(SafeValue(peps1));
+            strContent.Append(SafeValue(peps2));
+            strContent.Append(SafeValue(peps3, wWeather != null));
+
+            if (wWeather != null)
+            {
+                strContent.Append(SafeValue(wWeather.currentConditions.cloudcover));
+                strContent.Append(SafeValue(wWeather.currentConditions.conditions));
+                strContent.Append(SafeValue(wWeather.currentConditions.temp));
+                strContent.Append(SafeValue(wWeather.currentConditions.humidity));
+                strContent.Append(SafeValue(wWeather.currentConditions.dew));
+                strContent.Append(SafeValue(wWeather.currentConditions.windspeed));
+                strContent.Append(SafeValue(wWeather.currentConditions.windgust));
+                strContent.Append(DecodeDirection(wWeather.currentConditions.winddir)+",");
+                strContent.Append(SafeValue(wWeather.currentConditions.pressure));
+                strContent.Append(SafeValue(wWeather.currentConditions.visibility));
+                strContent.Append(SafeValue(wWeather.currentConditions.sunrise));
+                strContent.Append(SafeValue(wWeather.currentConditions.sunset, false));
+            }
+            
+            File.AppendAllText(strTargetFile, strContent.ToString());
+        }
+        #endregion
+
+        private void GetWeather()
+        {
+            
+        }
+        
+        #region API Call methods
+
         /// <summary>
         /// Method to obtain the RealTimeData from the Solax API.
-        ///
-        /// NOTE: ONLY A SINGLE CALL CAN BE ACTIVE AT A TIME - THIS IS NOT THREAD SAFE
+        /// 
         /// </summary>
+        /// <param name="client">The HTTP Client to use for api calls</param>
         /// <param name="strBaseApiAddress">The URL to use to trigger the API</param>
         /// <param name="strRegistrationNumber">The registration number for the inverter whose data you wish to obtain</param>
         /// <param name="strTokenId">The TokenId provided by SolaxCloud</param>
         /// <returns>The date returned by the API - this may be null</returns>
         /// <exception cref="Exception">Thrown if a call is already active</exception>
         /// <exception cref="ArgumentException">Thrown if any of the required parameters are empty or null</exception>
-        public static SolaxRealTime? GetSolaxRealTimeData(string strBaseApiAddress, string strRegistrationNumber, string strTokenId)
+        public static SolaxRealTime? GetSolaxRealTimeData(HttpClient client, string strBaseApiAddress, string strRegistrationNumber, string strTokenId)
         {
             if (blIsGetActive)
             {
@@ -299,7 +468,7 @@ namespace SolaxReader
             }
             
             blIsGetActive = true;
-            RunAsync(strBaseApiAddress, strRegistrationNumber, strTokenId).GetAwaiter().GetResult();
+            RunAsync(client, strBaseApiAddress, strRegistrationNumber, strTokenId).GetAwaiter().GetResult();
             blIsGetActive = false;
 
             return (srtDataFromApi);
@@ -308,11 +477,12 @@ namespace SolaxReader
         /// <summary>
         /// Method to get the Solax Real-Time data via an API call
         /// </summary>
-        /// <param name="path">The URL to use to trigger the API</param>
+        /// <param name="client">The HTTP client to use for the api call</param>
         /// <returns>The information requested or null if an error occurs</returns>
-        private static async Task<SolaxRealTime?> GetSolaxDetailsAsync(string path)
+        private static async Task<SolaxRealTime?> GetSolaxDetailsAsync(HttpClient client)
         {
-            HttpResponseMessage response = await client.GetAsync(path);
+            
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
 
             // If we got an http/tcp-ip error
             if (!response.IsSuccessStatusCode)
@@ -329,7 +499,7 @@ namespace SolaxReader
             //Console.WriteLine(strResult);
 
             // Deserialize the information returned from the API call
-            SolaxResult? srResult = JsonSerializer.Deserialize<SolaxResult>(strResult);
+            SolaxResult? srResult = JsonConvert.DeserializeObject<SolaxResult>(strResult);
 
             // If there was an error we report it and return
             if (!(bool)(srResult?.success))
@@ -348,24 +518,28 @@ namespace SolaxReader
         /// <summary>
         /// Method to manage the calling of the API
         /// </summary>
-        private static async Task RunAsync(string strBaseApiAddress, string strRegistrationNumber, string strTokenId)
+        private static async Task RunAsync(HttpClient client, string strBaseApiAddress, string strRegistrationNumber, string strTokenId)
         {
             string strApiAddress = $"{strBaseApiAddress}?tokenId={strTokenId}&sn={strRegistrationNumber}";
             
-            // Prepare the client for 
-            client.BaseAddress = new Uri(strApiAddress);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // Prepare the client for API call
+            if (client.BaseAddress == null)
+            {
+                client.BaseAddress = new Uri(strApiAddress);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
 
             try
             {
                 // Get the real-time data and then display it if what we get back isn't null
-                srtDataFromApi = await GetSolaxDetailsAsync(client.BaseAddress.ToString());
+                srtDataFromApi = await GetSolaxDetailsAsync(client);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
     }
 }

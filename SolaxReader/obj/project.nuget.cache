@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "acuBOjoXpGrIwlhEi75cINS93VmUgtWjHMf9xUq1KWSEsa7YU2A5qz/CRP/kVHhTsl/FCasQs0YKhwA1Y5xyHw==",
+  "dgSpecHash": "v12x9QGR4TUbdyTAnAEVhpAQ/RAFARWiBc5YYlAzTNZkZKuFBNOuLBqISjnKylSP1fzbpf4/lTIsL4A2MZsSgg==",
   "success": true,
-  "projectFilePath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj",
+  "expectedPackageFiles": [
+    "/Users/darrenwray/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

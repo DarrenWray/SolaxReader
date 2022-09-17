@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxConsole/SolaxConsole.csproj": {}
+    "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxConsole/SolaxConsole.csproj": {}
   },
   "projects": {
-    "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxConsole/SolaxConsole.csproj": {
+    "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxConsole/SolaxConsole.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxConsole/SolaxConsole.csproj",
+        "projectUniqueName": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxConsole/SolaxConsole.csproj",
         "projectName": "SolaxConsole",
-        "projectPath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxConsole/SolaxConsole.csproj",
+        "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxConsole/SolaxConsole.csproj",
         "packagesPath": "/Users/darrenwray/.nuget/packages/",
-        "outputPath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxConsole/obj/",
+        "outputPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxConsole/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/darrenwray/.nuget/NuGet/NuGet.Config"
@@ -20,15 +20,18 @@
           "net6.0"
         ],
         "sources": {
-          "/Volumes/External/Dropbox/Source/source/Local Nuget": {},
+          "/Users/darrenwray/Dropbox/Source/source/Local Nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj": {
-                "projectPath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj"
+              "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj": {
+                "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj"
+              },
+              "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj": {
+                "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj"
               }
             }
           }
@@ -62,14 +65,14 @@
         }
       }
     },
-    "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj": {
+    "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj",
+        "projectUniqueName": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj",
         "projectName": "SolaxReader",
-        "projectPath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/SolaxReader.csproj",
+        "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader.csproj",
         "packagesPath": "/Users/darrenwray/.nuget/packages/",
-        "outputPath": "/Volumes/External/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/SolaxReader/obj/",
+        "outputPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/SolaxReader/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/darrenwray/.nuget/NuGet/NuGet.Config"
@@ -78,7 +81,71 @@
           "net6.0"
         ],
         "sources": {
-          "/Volumes/External/Dropbox/Source/source/Local Nuget": {},
+          "/Users/darrenwray/Dropbox/Source/source/Local Nuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj": {
+                "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj",
+        "projectName": "VisualCrossingWeather",
+        "projectPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/VisualCrossingWeather.csproj",
+        "packagesPath": "/Users/darrenwray/.nuget/packages/",
+        "outputPath": "/Users/darrenwray/Dropbox/Source/DW GitHub/SolaxReader/VisualCrossingWeather/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/darrenwray/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/Users/darrenwray/Dropbox/Source/source/Local Nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -96,6 +163,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
